@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Weather App</title>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <!-- <script src="js/scripts.js"></script> -->
+  </head>
+  <div class = "container">
+    <body>
+      <h1>Weather App</h1>
+      <form id="weather_app">
+        <div id="zipcode">
+          <div class = "col-md-3">
+            <label for="zipcode">Enter Zipcode</label>
+            <input type="text" class="form-control" id="zipcode">
+          </div>
+          <br></br>
+          <div class = "col-md-12">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </form>
+      <div class = "col-md-12">
+          <div id = "result">
+          </div>
+        </div>
+
+        <script>
+        jQuery(document).ready(function($) {
+          var temp, image;
+
+          $("form#weather_app").submit(function(event) {
+            event.preventDefault();
+            var zipcode = $('input#zipcode').val();
+            var geourl = "http://api.wunderground.com/api/688fb74b3e485532/geolookup/conditions/q/"+zipcode+".json"
+            console.log(geourl)
+
+            $.ajax({
+              url: geourl,
+              dataType : "jsonp",
+              success : function(parsed_json) {
+                temp = parsed_json['current_observation']['temp_f'];
+                image = parsed_json['current_observation']['icon_url'];
+                console.log(`temperature is ${temp}`);
+                console.log(image);
+                console.log(parsed_json);
+                $("#result").append(`<img src=${image} />`,` Temperature in ${zipcode} currently is ${temp} degrees F`)
+              }
+            });
+          });
+        });
+        </script>
+    </body>
+</html>
